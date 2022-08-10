@@ -20,7 +20,15 @@
   )
 
 ;; Problema 5
+
+(define (find-needle* lst index)
+  (if (null? lst) -1
+      (if(eq? (first lst) 'needle)
+         index
+         (find-needle* (rest lst) (+ index 1)))))
+  
 (define (find-needle lst)
-  (index-of lst 'needle))
+  (find-needle* lst 0))
+
 
 ;; Problema 6
