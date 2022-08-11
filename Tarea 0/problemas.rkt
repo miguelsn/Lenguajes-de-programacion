@@ -39,3 +39,7 @@
 ;; Problema 7
 (define (inclis1 ls)
   (map (lambda (x) (+ 1 x)) ls))
+
+;; Problema 8
+(define (even? x)
+  (if (integer? (/ x 2)) #t #f))
