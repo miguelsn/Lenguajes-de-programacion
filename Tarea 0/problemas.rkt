@@ -15,15 +15,14 @@
 (define (rectangle-properties chars)
   (list
     (*(list-ref chars 0) (list-ref chars 1))
-    (+ (*(list-ref chars 0) 2) (*(list-ref chars 1) 2))
-      )
-  )
+    (+ (*(list-ref chars 0) 2) (*(list-ref chars 1) 2))))
 
 ;; Problema 5
 
 (define (find-needle* lst index)
-  (if (null? lst) -1
-      (if(eq? (first lst) 'needle)
+  (if (null? lst) 
+      -1
+      (if (eq? (first lst) 'needle)
          index
          (find-needle* (rest lst) (+ index 1)))))
   
