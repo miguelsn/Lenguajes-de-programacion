@@ -43,3 +43,12 @@
 ;; Problema 8
 (define (even? x)
   (if (integer? (/ x 2)) #t #f))
+
+;; Problema 9
+(define another-add
+  (lambda (n m)
+    (cond
+         [(zero? n) m]
+         [else (add1 (another-add (sub1 n) m ))])))
+
+(provide (all-defined-out))
