@@ -33,5 +33,9 @@
 
 ;; Problema 6
 
+(define (abs x)
+  (if (negative? x) (* x -1) x))
 
-
+;; Problema 7
+(define (inclis1 ls)
+  (map (lambda (x) (+ 1 x)) ls))
