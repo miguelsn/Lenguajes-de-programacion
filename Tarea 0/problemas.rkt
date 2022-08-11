@@ -12,22 +12,22 @@
   (list (* pi r r) (* pi r 2)))
 
 ;; Problema 4
-(define (rectangle-properties chars)
+(define (rectangle-properties rec)
   (list
-    (*(list-ref chars 0) (list-ref chars 1))
-    (+ (*(list-ref chars 0) 2) (*(list-ref chars 1) 2))))
+    (*(list-ref rec 0) (list-ref rec 1))
+    (+ (*(list-ref rec 0) 2) (*(list-ref rec 1) 2))))
 
 ;; Problema 5
 
-(define (find-needle* lst index)
-  (if (null? lst) 
+(define (find-needle* ls index)
+  (if (null? ls) 
       -1
-      (if (eq? (first lst) 'needle)
+      (if (eq? (first ls) 'needle)
          index
-         (find-needle* (rest lst) (+ index 1)))))
+         (find-needle* (rest ls) (+ index 1)))))
   
-(define (find-needle lst)
-  (find-needle* lst 0))
+(define (find-needle ls)
+  (find-needle* ls 0))
 
 
 ;; Problema 6
