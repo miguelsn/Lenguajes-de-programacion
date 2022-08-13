@@ -17,9 +17,16 @@
        (cons (first ls) (insertL 'x 'y (rest ls))))))
   
 ; Problema 3
+
 (define (remv-1st x ls)
   (if(eqv? ls '())
+     null
+     (if(eqv? (first ls) x )
+        (rest ls)
+        (cons (first ls) (remv-1st x (rest ls))))))
+
+; Problema 4
+(define (map proc ls)
+  (if(null? ls)
     null
-    (if(eqv? (first ls) x )
-       (rest ls)
-       (cons (first ls) (remv-1st x (rest ls))))))
+    (cons (proc (first ls)) (map proc (rest ls)))))
