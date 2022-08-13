@@ -28,5 +28,13 @@
 ; Problema 4
 (define (map proc ls)
   (if(null? ls)
-    null
-    (cons (proc (first ls)) (map proc (rest ls)))))
+     null
+     (cons (proc (first ls)) (map proc (rest ls)))))
+
+; Problema 5
+(define (filter proc ls)
+  (if (null? ls)
+      null
+      (if (proc (first ls))
+          (cons (first ls) (filter proc (rest ls)))
+          (filter proc (rest ls)))))
