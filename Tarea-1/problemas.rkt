@@ -88,5 +88,24 @@
 ; Problema 12
 (define (eqv)
   (equal? '((w . (x . ())) y (z . ())) '((w x) y (z))))
-  ;(equal? '((w . (x . ())) y (z . ())) '((x w) y (z))))
+
+; Problema 13
+(define (binary->natural ls)
+  (binary->natural* ls 0))
+
+(define (binary->natural* ls n)
+  (if (null? ls)
+      0
+      (+ (* (first ls) (expt 2 n)) (binary->natural* (rest ls) (add1 n)))))
+
+; Problema 14
+(define (div x y)
+  (div* x y 1))
+
+(define (div* x y n)
+  (if (> (* y n) x)
+     #f
+     (if(eq? (* y n) x)
+        n
+     (div* x y (add1 n)))))
 (provide (all-defined-out))
