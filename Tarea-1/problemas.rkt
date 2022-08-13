@@ -38,3 +38,19 @@
       (if (proc (first ls))
           (cons (first ls) (filter proc (rest ls)))
           (filter proc (rest ls)))))
+
+; Problema 6
+(define (zip ls lz)
+  (if (or (null? ls) (null? lz))
+      null
+      (cons (cons (first ls) (first lz)) (zip (rest ls) (rest lz))))) 
+
+; Problema 7
+(define (append ls lz)
+  (if (and (null? ls) (null? lz))
+      null
+      (if (null? ls)
+          (append lz ls)
+          (cons (first ls) (append (rest ls) lz)))))       
+     
+  
