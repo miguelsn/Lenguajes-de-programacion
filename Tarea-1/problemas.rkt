@@ -76,6 +76,17 @@
      ls
      (append ls (repeat ls (sub1 n)))))
 
-
-
+; Problema 11
+(define (same-lists* ls lz)
+  (if (and (null? ls) (null? lz))
+      #t
+      (if (or (null? ls) (null? lz))
+          #f
+          (if (equal? (first ls) (first lz))
+              (same-lists* (rest ls) (rest lz))
+              #f))))
+; Problema 12
+(define (eqv)
+  (equal? '((w . (x . ())) y (z . ())) '((w x) y (z))))
+  ;(equal? '((w . (x . ())) y (z . ())) '((x w) y (z))))
 (provide (all-defined-out))
