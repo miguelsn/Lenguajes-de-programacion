@@ -64,6 +64,18 @@
           (append lz ls)
           (cons (first ls) (append (rest ls) lz)))))       
 
+; Problema 9 
+(define (reverse ls)
+  (if (null? ls)
+      null
+      (cons (last(ls)) reverse(ls))))
+
+; Problema 10
+(define (repeat ls n)
+  (if(eq? n 1)
+     ls
+     (append ls (repeat ls (sub1 n)))))
 
 
-  
+
+(provide (all-defined-out))
