@@ -46,11 +46,24 @@
       (cons (cons (first ls) (first lz)) (zip (rest ls) (rest lz))))) 
 
 ; Problema 7
+(define (list-index-ofv* x ls index)
+  (if (null? ls)
+      -1
+      (if (eq? (first ls) x)
+          index
+          (list-index-ofv* x (rest ls) (+ index 1)))))
+
+(define (list-index-ofv x ls)
+  (list-index-ofv* x ls 0))
+
+; Problema 8
 (define (append ls lz)
   (if (and (null? ls) (null? lz))
       null
       (if (null? ls)
           (append lz ls)
           (cons (first ls) (append (rest ls) lz)))))       
-     
+
+
+
   
