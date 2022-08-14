@@ -113,9 +113,16 @@
 ; Problema 15
 (define (append-map proc1 proc2)
   (if(null? proc2)
-  null
-  (append (proc1 (first proc2)) (append-map proc1 (rest proc2)))))
+     null
+     (append (proc1 (first proc2)) (append-map proc1 (rest proc2)))))
 
+; Problema 16
+(define (set-difference ls lz)
+  (if (null? ls)
+      null
+      (if (eq? (member (first ls) lz) #f)
+          (cons (first ls) (set-difference (rest ls) lz))
+          (set-difference (rest ls) lz))))
 
 
               
