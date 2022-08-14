@@ -109,3 +109,13 @@
         n
      (div* x y (add1 n)))))
 (provide (all-defined-out))
+
+; Problema 15
+(define (append-map proc1 proc2)
+  (if(null? proc2)
+  null
+  (append (proc1 (first proc2)) (append-map proc1 (rest proc2)))))
+
+
+
+              
