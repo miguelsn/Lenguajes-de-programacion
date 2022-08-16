@@ -124,5 +124,9 @@
           (cons (first ls) (set-difference (rest ls) lz))
           (set-difference (rest ls) lz))))
 
+; Problema 17
+(define (foldr op x ls)
+  (if (null? ls)
+      x
+      (op (first ls) (foldr op x (rest ls)))))
 
-              
