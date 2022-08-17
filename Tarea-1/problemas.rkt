@@ -130,3 +130,26 @@
       x
       (op (first ls) (foldr op x (rest ls)))))
 
+; Problema 18
+(define (powerset ls)
+  (if (null? ls)
+      (list ls)
+       (let ([ps (powerset (rest ls))])
+             (append (ch-append (first ls) ps) ps))))
+
+; Problema 19
+(define (cartesian ls lz)
+  (if(null? ls)
+     null
+     (append (ch-append (first ls) lz) (cartesian (rest ls) lz))))
+
+
+; Problema 20
+
+  
+
+; Funciones auxiliares
+(define (ch-append x ls)
+	(if (null? ls) 
+		null
+		(cons (cons x (first ls)) (ch-append x (rest ls)))))
