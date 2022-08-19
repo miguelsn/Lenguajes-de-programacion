@@ -68,7 +68,7 @@
 (define (reverse ls)
   (if (null? ls)
       null
-      (cons (last(ls)) reverse(ls))))
+      (cons (last ls) (reverse (drop-right ls 1)))))
 
 ; Problema 10
 (define (repeat ls n)
@@ -145,11 +145,79 @@
 
 
 ; Problema 20
+; insertL
+(define (insertL-fr x y ls)
+(foldr (lambda (z zs)
+         (if (eqv? z x)
+             (cons y (cons x zs))
+             (cons z zs)))
+       '()
+       ls))
 
+; filter
+(define (filter-fr proc ls)
+  (foldr (lambda (x xs)
+           (if (proc x)
+               (cons x xs)
+               xs))
+         '()
+         ls))
   
+; map
+(define (map-fr op ls)
+  (foldr (lambda (x xs)
+           (cons (op x) xs))
+         '()
+         ls))
+; append
+(define (append-fr ls lz)
+  (foldr (lambda (x xs)
+           (if (null? xs)
+               (cons x lz)
+               (cons x xs)))     
+         '()
+         ls))
+; reverse
+(define (reverse-fr ls)
+  (foldr (lambda (x xs)
+           (append xs (list x)))
+         '()
+         ls))
+
+; binary-> natural
+(define (binary->natural-fr ls n)
+  (foldr (lambda (x xs)
+           (+ (* x (expt 2 (+ (length xs) 1))) xs))
+         0
+         ls))
+
+; append-map
+(define (append-map-fr proc1 proc2)
+  (foldr (lambda (x xs)
+           (append (proc1 x) xs))
+         '()
+         proc2))
+ 
+;set-difference-fr
+(define (set-difference-fr ls lz)
+  (foldr (lambda (x xs)
+           (if (eq? (member x lz) #f)
+               (cons x xs)
+               xs))
+         '()
+         ls))
+;powerset-fr
+(define (powerset-fr ls)
+  (foldr (lambda (x xs)
+            (append-map (lambda (y)
+                          (list (cons x y) y))
+                        xs))
+         '(())
+         ls))
 
 ; Funciones auxiliares
 (define (ch-append x ls)
 	(if (null? ls) 
 		null
 		(cons (cons x (first ls)) (ch-append x (rest ls)))))
+
