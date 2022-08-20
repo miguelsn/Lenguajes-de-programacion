@@ -214,6 +214,38 @@
                         xs))
          '(())
          ls))
+; Problema 21
+(define snowball
+  (letrec
+      ((odd-case
+        (lambda (fix-odd)
+          (lambda (x)
+            (cond
+             ((and (exact-integer? x) (positive? x) (odd? x))
+               (snowball (add1 (* x 3))))
+              (else (fix-odd x))))))
+       (even-case
+        (lambda (fix-even)
+          (lambda (x)
+            (cond
+              ((and (exact-integer? x) (positive? x) (even? x))
+               (snowball (/ x 2)))
+              (else (fix-even x))))))
+       (one-case
+        (lambda (fix-one)
+          (lambda (x)
+            (cond
+              ((zero? (sub1 x)) 1)
+              (else (fix-one x))))))
+       (base
+        (lambda (x)
+          (error "a"))))
+    
+    (one-case (even-case (odd-case base)))))
+
+; Problema 22
+;(define quine ((lambda (x) (list x (list 'quote x)))
+               ;'(lambda (x) (list x (list 'quote x)))))
 
 ; Funciones auxiliares
 (define (ch-append x ls)
