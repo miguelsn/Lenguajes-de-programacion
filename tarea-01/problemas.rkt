@@ -12,7 +12,7 @@
 (define (insertL x y ls)
  (if(eqv? ls '())
     null
-    (if(eqv? (first ls) x )
+    (if(eqv? (first ls) x)
        (cons y (cons x (insertL 'x 'y (rest ls))))
        (cons (first ls) (insertL 'x 'y (rest ls))))))
   
@@ -21,7 +21,7 @@
 (define (remv-1st x ls)
   (if(eqv? ls '())
      null
-     (if(eqv? (first ls) x )
+     (if(eqv? (first ls) x)
         (rest ls)
         (cons (first ls) (remv-1st x (rest ls))))))
 
@@ -107,8 +107,7 @@
      #f
      (if(eq? (* y n) x)
         n
-     (div* x y (add1 n)))))
-(provide (all-defined-out))
+        (div* x y (add1 n)))))
 
 ; Problema 15
 (define (append-map proc1 proc2)
@@ -134,8 +133,8 @@
 (define (powerset ls)
   (if (null? ls)
       (list ls)
-       (let ([ps (powerset (rest ls))])
-             (append (ch-append (first ls) ps) ps))))
+      (let ([ps (powerset (rest ls))])
+            (append (ch-append (first ls) ps) ps))))
 
 ; Problema 19
 (define (cartesian ls lz)
@@ -202,8 +201,10 @@
 
 ; binary-> natural
 (define (binary->natural-fr ls)
-  (foldr (lambda (x y)
-           (+ x (* 2 y))) 0 ls))
+  (foldr (lambda (x xs)
+           (+ x (* 2 xs)))
+         0
+         ls))
 
       
 ; append-map
