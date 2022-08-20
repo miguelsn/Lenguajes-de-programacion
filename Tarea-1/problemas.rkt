@@ -253,3 +253,4 @@
 		null
 		(cons (cons x (first ls)) (ch-append x (rest ls)))))
 
+(provide (all-defined-out))
