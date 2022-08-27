@@ -16,7 +16,5 @@
                            '())
              (check-equal? (bundle '("a" "b") 3)
                            (list "ab"))
-             (check-equal? (bundle (explode "abc") 0)
-                           '())
              (check-exn exn:fail? (thunk (bundle '("") 3)))))
 (run-tests pruebas 'verbose)

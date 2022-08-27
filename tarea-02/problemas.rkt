@@ -5,7 +5,6 @@
 (define (bundle s n)
   (cond
     [(null? s) null]
-    [(zero? n) null]
     [else (cons (implode (take s n))
                 (bundle (drop s n) n))]))
 ; Problema 3
@@ -19,7 +18,26 @@
       ls
       (drop (rest ls) (sub1 n))))
 
+; Problema 6
+(define (list->chunks ls n)
+  (cond
+    [(null? ls) null]
+    [else (cons (take ls n) (list->chunks (drop ls n) n))]))
 
+(define (bundle-chunks ls n)
+  (let loop ([lz (list->chunks ls n)])
+    (if (null? lz)
+        null
+        (cons (implode (first lz)) (loop (rest lz))))))
+
+; Problema 7
+(define (partition s n)
+  (if (> n (string-length s))
+      (if (eq? (string-length s) 0)
+      null
+      (list s))
+      (cons (substring s 0 n) (partition (substring s n) n))))
+        
 ; Funciones auxiliares
 (define (explode s)
   (unless (string? s)
