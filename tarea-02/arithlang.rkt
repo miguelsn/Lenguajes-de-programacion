@@ -19,10 +19,25 @@
      (let ([ls (s-exp->list s)])
        (if (not (empty? ls))
            (case (s-exp->symbol (first ls))
-             [(+) (plusS (parse (second ls)) (parse (third ls)))]
-             [(*) (multS (parse (second ls)) (parse (third ls)))]
-             [(-) (subS (parse (second ls)) (parse (third ls)))]
-             [(n) (negS (parse (second ls)))]
+             [(+)
+              (if (eq? (length ls) 3)
+                  (plusS (parse (second ls)) (parse (third ls)))
+                  (error 'parse "operacion aritmetica mal formada"))]
+             [(*)
+              (if (eq? (length ls) 3)
+                  (multS (parse (second ls)) (parse (third ls)))
+                  (error 'parse "operacion aritmetica mal formada"))]
+             
+             [(-)
+              (if (eq? (length ls) 3)
+                  (subS (parse (second ls)) (parse (third ls)))
+                  (error 'parse "operacion aritmetica mal formada"))]
+             
+             [(n)
+              (if (eq? (length ls) 2)
+                  (negS (parse (second ls)))
+                  (error 'parse "operacion aritmetica mal formada"))]
+
              [else (error 'parse "operacion aritmetica mal formada")])
            (error 'parse "operacion aritmetica mal formada")))]
     [else (error 'parse "operacion aritmetica mal formada")]))
@@ -37,7 +52,7 @@
 
 (define (interp [a : ArithC]) : Number
   (type-case ArithC a
-    [(numC n) (n)]
+    [(numC n) n]
     [(plusC l r) (+ (interp l) (interp r))]
     [(multC l r) (* (interp l) (interp r))]))
 
