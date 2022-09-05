@@ -32,7 +32,7 @@
 ; list->chunks : list?, integer? -> list
 (define (list->chunks ls n)
   (cond
-    [(null? ls) null]
+    [(or (null? ls) (zero? n)) null]
     [else (cons (take ls n) (list->chunks (drop ls n) n))]))
 
 ; bundle-chunks : list?, integer? -> list
@@ -46,11 +46,13 @@
 
 ; partition : string?, integer? -> list
 (define (partition s n)
-  (if (> n (string-length s))
-      (if (eq? (string-length s) 0)
-      null
-      (list s))
-      (cons (substring s 0 n) (partition (substring s n) n))))
+  (if (> n 0)
+      (if (> n (string-length s))
+          (if (eq? (string-length s) 0)
+              null
+              (list s))
+          (cons (substring s 0 n) (partition (substring s n) n)))
+      null))
 
 
 ; Problema 8
@@ -114,6 +116,15 @@
                (filter (lambda (x) (equal? x pivot)) ls)
                (general-quicksort (filter (lambda (x) (and (not (proc x pivot)) (not (equal? x pivot)))) ls) proc))]))
 ; Problema 13
+(define (iquicksort ls)
+  (cond
+    [(empty? ls) null]
+    [(<= (length ls) 150) (isort ls)]
+    [else
+     (define pivot (first ls))
+       (append (quicksort (smallers ls pivot))
+               (equals ls pivot)
+               (quicksort (largers ls pivot)))]))
 
 ; Problema 14
 ; smallers-filter : list?, integer? -> list
