@@ -162,10 +162,12 @@
 ; Fractal
 
 (define (circles n s)
-  (let ([p (white (circle s))])
-    (if (eq? n 1)
-        (hc-append p p)
-        (hc-append (cc-superimpose p (circles (- n 1) (/ s 2))) (cc-superimpose p (circles (- n 1) (/ s 2)))))))
+  (if (> n 0)
+      (let ([p (white (circle s))])
+        (if (eq? n 1)
+            (hc-append p p)
+            (hc-append (cc-superimpose p (circles (- n 1) (/ s 2))) (cc-superimpose p (circles (- n 1) (/ s 2))))))
+      (error 'circles "Iteraciones invalidas")))
 
 (define (fractal)
   (circles 10 500))

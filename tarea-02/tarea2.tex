@@ -36,7 +36,10 @@ Comenzando con los datos 10 y 17, no existe una diferencia, lo mismo sucede con 
 \textbf{Problema 22\\
 Piensa y describe por qué no siempre es la mejor opción elegir el procedimiento más eficiente en tiempo de ejecución. Utiliza criterios que no sean el de “eficiencia”.}\\
 La primera razon para no elegir un mejor tiempo de ejecucion es lo comprensible que es una solucion. Si un algoritmo es mas complicado de entender que otro y la diferencia entre eficiencia es muy pequeña, es mejor tener un algoritmo entendible que esa diferencia de eficiencia.\\
-Otro motivo podria ser que un algoritmo sea mas rapido pero que utilize demasiada memoria lo cual puede ocasionar muchos problemas con una cantidad grande de datos, por lo que es mejor utilizar un algoritmo que tarde mas pero evite estos problemas.
-
+Otro motivo podria ser que un algoritmo sea mas rapido pero que utilize demasiada memoria lo cual puede ocasionar muchos problemas con una cantidad grande de datos, por lo que es mejor utilizar un algoritmo que tarde mas pero evite estos problemas.\\
+\textbf{Problema 23\\
+Implementa un procedimiento que genere otro fractal, toma en consideración la discusión de esta tarea, caracteriza el tipo de recursividad que utilizaste y justifica la terminación de tu procedimiento.}\\
+Se genero el fractal utilizando recursividad generativa y va a terminar siempre y cuando reciba un numero positivo esto se debe a que la funcion auxiliar del fractal tiene un contador donde va decreciendo en 1 a 1 hasta llegar a 0. Sin embargo, un valor negativo causaria un ciclo infinito por lo que hay un filtro para que no existan las iteraciones negativas.\\
+El hecho de que se asegure la terminacion no significa que se puedan correr \textit{n} iteraciones, ya que existe un limite dado por la memoria fisica del sistema (o la memoria que se le permita tomar a racket) por lo que numeros muy grandes no van a funcionar.
 
 \end{document}
