@@ -1,5 +1,6 @@
 #lang racket
-
+(require pict
+         pict/color)
 
 ; Problema 2, 17
 
@@ -158,7 +159,16 @@
                                     (cons (first lz) (larger (rest lz) n)))))))]))
 
   
+; Fractal
 
+(define (circles n s)
+  (let ([p (white (circle s))])
+    (if (eq? n 1)
+        (hc-append p p)
+        (hc-append (cc-superimpose p (circles (- n 1) (/ s 2))) (cc-superimpose p (circles (- n 1) (/ s 2)))))))
+
+(define (fractal)
+  (circles 10 500))
 
 ; Funciones auxiliares
 ; explode : string? -> list
