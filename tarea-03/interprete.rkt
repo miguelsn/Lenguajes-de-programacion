@@ -51,7 +51,7 @@
 ;;;;;;;;;;;;;;;
 
 (define (eval [str : S-Exp]) : Value
-  (interp (desugar (parse str)) empty-env))
+  (interp (desugar (parse str))))
 
 
 ;;;;;;;;;;;;;
@@ -77,31 +77,33 @@
 ;;;;;;;;;;;;
 ;; INTERP ;;
 ;;;;;;;;;;;;
+(define (interp [e : ExprC]) : Value
+  (interp-helper e empty-env))
 
-(define (interp [e : ExprC] [env : Env]) : Value
+(define (interp-helper [e : ExprC] [env : Env]) : Value
   (type-case ExprC e
     [(numC value) (numV value)]
     [(strC value) (strV value)]
     [(boolC value) (boolV value)]
     [(idC name) (lookup-env name env)]
     [(ifC a b c)
-     (let ([condition (interp a env)])
+     (let ([condition (interp-helper a env)])
        (if (boolV? condition)
            (if (boolV-value condition)
-               (interp b env)
-               (interp c env))
-           (error 'if "Argumento incorrecto")))]
+               (interp-helper b env)
+               (interp-helper c env))
+           (error 'if "no es un valor booleano")))]
     [(binopC op left right)
-     (let ([left (interp left env)])
-       (let ([right (interp right env)])
+     (let ([left (interp-helper left env)])
+       (let ([right (interp-helper right env)])
          (interp-binop op left right)))]
     [(funC param body) (funV param body)]
     [(appC func arg) 
-     (let ([f (interp func env)])
+     (let ([f (interp-helper func env)])
        (if (funV? f)
-           (let ([nenv (cons (bind (funV-param f) (interp arg env)) env)])
-             (interp (funV-body f) nenv))
-           (error 'interp "Call invalido" )))]))
+           (let ([nenv (cons (bind (funV-param f) (interp-helper arg env)) env)])
+             (interp-helper (funV-body f) nenv))
+           (error 'interp-helper "no es una función" )))]))
 (define (interp-binop [op : Operator]
                       [left : Value]
                       [right : Value]) : Value
@@ -111,31 +113,31 @@
          (if (numV? right)
              (numV (+ (numV-value left)
                       (numV-value right)))
-             (error 'binop "Argumento incorrecto"))
-         (error 'binop "Argumento incorrecto"))]
+             (error 'binop "argumento incorrecto"))
+         (error 'binop "argumento incorrecto"))]
     [(appendO)
      (if (strV? left)
          (if (strV? right)
              (strV (string-append (strV-value left) (strV-value right)))
-             (error 'binop "Argumento incorrecto"))
-         (error 'binop "Argumento incorrecto"))]
+             (error 'binop "argumento incorrecto"))
+         (error 'binop "argumento incorrecto"))]
     [(numeqO)
      (if (numV? left)
          (if (numV? right)
              (boolV (= (numV-value left) (numV-value right)))
-             (error 'binop "Argumento incorrecto"))
-         (error 'binop "Argumento incorrecto"))]
+             (error 'binop "argumento incorrecto"))
+         (error 'binop "argumento incorrecto"))]
     [(streqO)
      (if (strV? left)
          (if (strV? right)
              (boolV (string=? (strV-value left) (strV-value right)))
-             (error 'binop "Argumento incorrecto"))
-         (error 'binop "Argumento incorrecto"))]))
+             (error 'binop "argumento incorrecto"))
+         (error 'binop "argumento incorrecto"))]))
 
 (define (lookup-env [name : Symbol]
                     [env : Env]) : Value
   (cond
-    [(empty? env) (error 'lookup-env "Unbound identifier")]
+    [(empty? env) (error 'lookup-env "identificador no está enlazado")]
     [else (cond
             [(symbol=? name (bind-name (first env)))
              (bind-val (first env))]
@@ -160,7 +162,8 @@
     [(s-exp-match? `{fun ANY ...} in)              (parse-fun in)]
     [(s-exp-match? `{let {SYMBOL ANY} ANY ...} in) (parse-let in)]
     [(s-exp-match? `{ANY ...} in)                  (parse-app in)]
-    [(s-exp-symbol? in)                            (parse-id in)]))
+    [(s-exp-symbol? in)                           (parse-id in)]
+    [else (error 'parse "expresión malformada")]))
 
 (define (parse-number in)
   (numS (s-exp->number in)))
