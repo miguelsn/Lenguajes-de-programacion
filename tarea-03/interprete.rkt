@@ -8,7 +8,7 @@
   (numV [value : Number])
   (strV [value : String])
   (boolV [value : Boolean])
-  (funV [param : Symbol] [body : ExprC]))
+  (funV [param : Symbol] [body : ExprC] [e : Env]))
 
 (define-type Operator
   (plusO)
@@ -65,8 +65,8 @@
     [(boolS value) (boolC value)]
     [(idS name) (idC name)]
     [(ifS a b c) (ifC (desugar a) (desugar b) (desugar c))]
-    [(andS left right) (ifC (desugar left) (desugar right) (boolC #f))]
-    [(orS left right) (ifC (desugar left) (boolC #t) (desugar right))]
+    [(andS left right) (ifC (desugar left) (ifC (desugar right) (boolC #t) (boolC #f)) (boolC #f))]
+    [(orS left right) (ifC (desugar left) (boolC #t) (ifC (desugar right) (boolC #t) (boolC #f)))]
     [(binopS op left right)
      (binopC op (desugar left) (desugar right))]
     [(funS param body) (funC param (desugar body))]
@@ -97,11 +97,11 @@
      (let ([left (interp-helper left env)])
        (let ([right (interp-helper right env)])
          (interp-binop op left right)))]
-    [(funC param body) (funV param body)]
+    [(funC param body) (funV param body env)]
     [(appC func arg) 
      (let ([f (interp-helper func env)])
        (if (funV? f)
-           (let ([nenv (cons (bind (funV-param f) (interp-helper arg env)) env)])
+           (let ([nenv (cons (bind (funV-param f) (interp-helper arg env)) (funV-e f))])
              (interp-helper (funV-body f) nenv))
            (error 'interp-helper "no es una función" )))]))
 (define (interp-binop [op : Operator]
@@ -242,3 +242,5 @@
     (if (equal? (length inlst) 2)
         (appS (parse (first inlst)) (parse (second inlst)))
         (error 'parse "cantidad incorrecta de argumentos en aplicación de funciones"))))
+
+
