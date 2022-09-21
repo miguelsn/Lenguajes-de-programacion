@@ -44,7 +44,6 @@
 
 (define-type-alias Env (Listof Binding))
 (define empty-env empty)
-(define extend-env cons)
 (define default-env empty-env)
 ;;;;;;;;;;;;;;;
 ;; EVALUADOR ;;
