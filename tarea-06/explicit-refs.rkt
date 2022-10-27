@@ -285,9 +285,9 @@ Expresión:
   (integer? v))
 
 ;;;;;;;;;;;;;;;;;;
-;; COMPUTATION  ;;
+;; an-answer  ;;
 ;;;;;;;;;;;;;;;;;;
-(struct computation (val store)
+(struct an-answer (val store)
   #:transparent)
 
 
@@ -413,37 +413,37 @@ where:
   (cond
     [(const-exp? exp)
      (let ([n (const-exp-num exp)])
-       (computation (num-val n) s))]
+       (an-answer (num-val n) s))]
     [(var-exp? exp)
      (let ([var (var-exp-var exp)])
-       (computation (apply-env env var) s))]
+       (an-answer (apply-env env var) s))]
     [(diff-exp? exp)
      (let* ([exp1 (diff-exp-exp1 exp)]
             [exp2 (diff-exp-exp2 exp)]
             [comp1 (value-of exp1 env s)]
-            [val1 (computation-val comp1)]
-            [store1 (computation-store comp1)]
+            [val1 (an-answer-val comp1)]
+            [store1 (an-answer-store comp1)]
             [comp2 (value-of exp2 env store1)]
-            [val2 (computation-val comp2)]
-            [store2 (computation-store comp2)])
-       (computation (num-val
+            [val2 (an-answer-val comp2)]
+            [store2 (an-answer-store comp2)])
+       (an-answer (num-val
                      (- (expval->num val1)
                         (expval->num val2))) store2))]
     [(zero?-exp? exp)
      (let* ([exp1 (zero?-exp-exp1 exp)]
             [comp1 (value-of exp1 env s)]
-            [val1 (computation-val comp1)]
-            [store1 (computation-store comp1)])
+            [val1 (an-answer-val comp1)]
+            [store1 (an-answer-store comp1)])
        (if (equal? 0 (expval->num val1))
-           (computation (bool-val #t) store1)
-           (computation (bool-val #f) store1)))]
+           (an-answer (bool-val #t) store1)
+           (an-answer (bool-val #f) store1)))]
     [(if-exp? exp)
      (let* ([exp1 (if-exp-exp1 exp)]
             [exp2 (if-exp-exp2 exp)]
             [exp3 (if-exp-exp3 exp)]
             [comp1 (value-of exp1 env s)]
-            [val1 (computation-val comp1)]
-            [store1 (computation-store comp1)])
+            [val1 (an-answer-val comp1)]
+            [store1 (an-answer-store comp1)])
        (if (expval->bool val1)
            (value-of exp2 env store1)
            (value-of exp3 env store1)))]
@@ -452,24 +452,24 @@ where:
             [exp1 (let-exp-exp1 exp)]
             [body (let-exp-body exp)]
             [comp1 (value-of exp1 env s)]
-            [val1 (computation-val comp1)]
-            [store1 (computation-store comp1)])
+            [val1 (an-answer-val comp1)]
+            [store1 (an-answer-store comp1)])
        (value-of body (extend-env var val1 env) store1))]
     [(proc-exp? exp)
      (let ([var (proc-exp-var exp)]
            [body (proc-exp-body exp)])
-       (computation (proc-val (procedure var body env))
+       (an-answer (proc-val (procedure var body env))
                     s))]
     [(call-exp? exp)
      (let ([rator (call-exp-rator exp)]
            [rand (call-exp-rand exp)])
        (let* ([comp1 (value-of rator env s)]
-              [vrator (computation-val comp1)]
-              [store1 (computation-store comp1)]
+              [vrator (an-answer-val comp1)]
+              [store1 (an-answer-store comp1)]
               [proc (expval->proc vrator)]
               [comp2 (value-of rand env store1)]
-              [varg (computation-val comp2)]
-              [store2 (computation-store comp2)]
+              [varg (an-answer-val comp2)]
+              [store2 (an-answer-store comp2)]
               [arg varg])
          (apply-procedure proc arg store2)))]
     [(letrec-exp? exp)
@@ -482,40 +482,40 @@ where:
      (let* ([exp1 (newref-exp-exp1 exp)]
             [next-ref (length the-store)]
             [cmp1 (value-of exp1 env s) ]
-            [val1 (computation-val cmp1)]
-            [s1 (computation-store cmp1)])
+            [val1 (an-answer-val cmp1)]
+            [s1 (an-answer-store cmp1)])
        (set! the-store (append the-store (list val1)))
-       (computation (ref-val next-ref) the-store))]
+       (an-answer (ref-val next-ref) the-store))]
     [(deref-exp? exp)
      (let* ([exp1 (deref-exp-exp1 exp)]
             [cmp1 (value-of exp1 env s)]
-            [val1 (computation-val cmp1)]
-            [s1 (computation-store cmp1)]
+            [val1 (an-answer-val cmp1)]
+            [s1 (an-answer-store cmp1)]
             [loc (expval->num val1)])
        (if (or
             (empty? (get-store))
-            (< loc 0)
+            (> 0 loc)
             (<= (length the-store) loc))
            (error 'deref-exp "no se puede encontrar la locación ~e" loc)
-           (computation (list-ref the-store loc) s1)))]
+           (an-answer (list-ref the-store loc) s1)))]
     [(setref-exp? exp)
      (let* ([exp1 (setref-exp-exp1 exp)]
             [exp2 (setref-exp-exp2 exp)]
             [cmp1 (value-of exp1 env s)]
-            [val1 (computation-val cmp1)]
-            [s1 (computation-store cmp1)]
+            [val1 (an-answer-val cmp1)]
+            [s1 (an-answer-store cmp1)]
             [cmp2 (value-of exp2 env s1)]
-            [val2 (computation-val cmp2)]
-            [s2 (computation-store cmp2)]
+            [val2 (an-answer-val cmp2)]
+            [s2 (an-answer-store cmp2)]
             [loc (expval->num val1)])
              (if (or
                   (empty? (get-store))
-                  (< loc 0)
+                  (< 0 loc)
                   (<= (length the-store) loc))
                  (error 'deref-exp "no se puede encontrar la locación ~e" loc)
                  (begin
                    (set! the-store (list-set the-store loc val2))
-                   (computation val2 the-store))))]
+                   (an-answer val2 the-store))))]
 [else
  ((error 'value-of "no es una expresión: ~e" exp))]))
 
