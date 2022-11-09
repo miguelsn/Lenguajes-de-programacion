@@ -1,0 +1,95 @@
+\documentclass[11pt]{article}
+
+\usepackage{sectsty}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage[normalem]{ulem}
+\usepackage{listings}
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\lstset{frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\title{ Tarea 07 - Análisis Léxico}
+\author{ Miguel Navarro }
+\date{9 de Noviembre del 2022}
+
+\begin{document}
+\maketitle	
+
+
+\section*{Problema 4}
+\subsection*{Sintaxis del lenguaje:}
+\begin{tabular}{ |c|c|c|c| } 
+\hline
+Sintaxis Abstracta & Sintaxis Concreta \\
+\hline 
+Expression := Number & const-exp(num)\\
+Expression := Boolean & const-exp(bool)\\
+Expression := - (Expression, Expression) & diff-exp (left right)  \\ 
+Expression := zero? (Expression) & zero?-exp (exp) \\
+Expression := if Expression then Expression else Expression & if-exp (condi then else) \\
+Expression := Identifier & var-exp(var)\\
+Expression := let Identifier = Expression in Expression & let-exp (var val body)\\
+\hline
+\end{tabular}
+\subsection*{Semántica del lenguaje:}
+\subsubsection*{Valores:}
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+\hline
+Valores expresados & Valores denotados\\
+\hline 
+ExpVal = Int + Bool & DenVal = Int + Bool\\
+\hline
+\end{tabular}
+\end{center}
+\subsubsection*{Entornos:}
+\begin{center}
+env es un entorno.\\
+(extend-env var val env) agrega un valor al entorno.\\
+(apply-env var env) busca un identificador \textit{var} en el entorno y al encontrarlo regresa su valor.\\
+\end{center}
+\subsubsection*{Comportamiento:}
+\begin{lstlisting}
+(value-of (const-exp n) env) = (num-val n)
+
+(value-of (var-exp var) env) = (apply-env env var)
+
+(value-of (diff-exp var) env) = 
+	(num-val (- (expval->num (value-of left))
+				(expval->num (value-of right))))
+				
+(value-of (zero? exp) env) = 
+		(bool-val #t) si (exp-val->num exp) = 0
+		(bool-val #f) en otro caso		
+
+(value-of (if-exp condi then else) env) =
+	(value-of then env) si (expval->bool condi) = #t
+	(value-of else env) si (expval->bool condi) = #f 	
+	
+(value-of (let-exp var val body) env) = 
+		(value-of body (extend-env var val env))
+\end{lstlisting}
+\end{document}
+
